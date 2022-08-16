@@ -29,6 +29,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
+    // корректно істеп тұр
     @PutMapping
     public ResponseEntity updateUser(@RequestBody UDetails uDetails){
         userService.update(uDetails);

@@ -1,8 +1,10 @@
 package com.example.OnlineCourses.services.impl;
 
 import com.example.OnlineCourses.domains.ConfirmationToken;
+import com.example.OnlineCourses.domains.Course;
 import com.example.OnlineCourses.domains.UDetails;
 import com.example.OnlineCourses.domains.User;
+import com.example.OnlineCourses.dtos.CourseDTO;
 import com.example.OnlineCourses.dtos.RegistrationRequest;
 import com.example.OnlineCourses.exceptions.RestAPIException;
 import com.example.OnlineCourses.repositories.UDetailsRepository;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
         confirmationTokenService.deleteById(id);
         userRepository.deleteById(id);
     }
-    
+
     @Override
     public void update(UDetails uDetails) {
         UDetails item = uDetailsRepository.findById(uDetails.getId())
@@ -106,5 +109,26 @@ public class UserServiceImpl implements UserService {
 
     public int enableUser(String login) {
         return userRepository.enableUser(login);
+    }
+
+    @Override
+    public List<CourseDTO> getTeacherCourses(Long teacherId) {
+        User teacher = userRepository.findById(teacherId)
+                .orElseThrow(() -> new RestAPIException("teacher with id " + teacherId + " not found"));
+        List<CourseDTO> courses = teacher.getTeacherCourses().stream()
+                .map((c) -> new CourseDTO(c.getId(), c.getName(), c.getDescription()))
+                .collect(Collectors.toList());
+//        List<Course> courses = teacher.getTeacherCourses();
+        return courses;
+    }
+
+    @Override
+    public List<CourseDTO> getStudentCourses(Long studentId) {
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new RestAPIException("student with id " + studentId + " not found"));
+        List<CourseDTO> courses = student.getStudentCourses().stream()
+                .map((c) -> new CourseDTO(c.getId(), c.getName(), c.getDescription()))
+                .collect(Collectors.toList());
+        return courses;
     }
 }

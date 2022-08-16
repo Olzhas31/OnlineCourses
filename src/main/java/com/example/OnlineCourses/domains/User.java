@@ -1,5 +1,6 @@
 package com.example.OnlineCourses.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name="\"user\"")
@@ -32,6 +34,14 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private UDetails uDetails;
+
+    @OneToMany(mappedBy = "teacher")
+    @JsonIgnore
+    private List<Course> teacherCourses;
+
+    @ManyToMany(mappedBy = "students")
+    @JsonIgnore
+    private List<Course> studentCourses;
 
     public User(){}
 
