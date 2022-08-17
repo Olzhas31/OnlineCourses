@@ -30,8 +30,9 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
 
-//    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-//    List<Lesson> lessons;
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private List<Lesson> lessons;
 
+//    comment
 
 }

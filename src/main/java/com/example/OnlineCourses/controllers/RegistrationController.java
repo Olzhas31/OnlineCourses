@@ -3,6 +3,7 @@ package com.example.OnlineCourses.controllers;
 import com.example.OnlineCourses.dtos.RegistrationRequest;
 import com.example.OnlineCourses.services.RegistrationService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,13 +15,13 @@ public class RegistrationController {
 
     // корректно істеп тұр
     @PostMapping
-    public String register(@RequestBody RegistrationRequest request){
-        return registrationService.register(request);
+    public ResponseEntity register(@RequestBody RegistrationRequest request){
+        return ResponseEntity.ok(registrationService.register(request));
     }
 
     // корректно істеп тұр
     @GetMapping(path = "/confirm")
-    public String confirm(@RequestParam("token") String token) {
-        return registrationService.confirmToken(token);
+    public ResponseEntity confirm(@RequestParam("token") String token) {
+        return ResponseEntity.ok(registrationService.confirmToken(token));
     }
 }
